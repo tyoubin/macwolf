@@ -6,9 +6,9 @@ A simple macOS menubar application to send Wake-on-LAN magic packets to preconfi
 
 To build the application from source, follow these steps:
 
-1. **Compile the Swift source**:
+1. **Build with Swift Package Manager**:
    ```bash
-   swiftc main.swift -o macwolf
+   swift build -c release
    ```
 
 2. **Create the App Bundle structure**:
@@ -18,7 +18,7 @@ To build the application from source, follow these steps:
 
 3. **Move the binary and Info.plist into the bundle**:
    ```bash
-   mv macwolf macwolf.app/Contents/MacOS/
+   cp .build/release/macwolf macwolf.app/Contents/MacOS/
    cp Info.plist macwolf.app/Contents/
    ```
 
@@ -27,3 +27,9 @@ To build the application from source, follow these steps:
    ```bash
    open macwolf.app
    ```
+
+## Running Tests
+
+```bash
+swift test
+```

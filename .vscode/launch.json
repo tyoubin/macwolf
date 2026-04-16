@@ -1,0 +1,24 @@
+{
+	"configurations": [
+		{
+			"type": "swift",
+			"request": "launch",
+			"args": [],
+			"cwd": "${workspaceFolder:macwolf}",
+			"name": "Debug macwolf",
+			"target": "macwolf",
+			"configuration": "debug",
+			"preLaunchTask": "swift: Build Debug macwolf"
+		},
+		{
+			"type": "swift",
+			"request": "launch",
+			"args": [],
+			"cwd": "${workspaceFolder:macwolf}",
+			"name": "Release macwolf",
+			"target": "macwolf",
+			"configuration": "release",
+			"preLaunchTask": "swift: Build Release macwolf"
+		}
+	]
+}
