@@ -5,34 +5,43 @@ private enum MenuStatus {
     case success(String)
     case failure(String)
 
-    var icon: String {
+    func detailMenuText(timestamp: String) -> String {
         switch self {
         case .idle:
-            return "network"
+            return "Status: Ready (\(timestamp))"
         case .success:
-            return "checkmark.circle.fill"
+            return "Status: \(detailText) (\(timestamp))"
         case .failure:
-            return "xmark.octagon.fill"
+            return "Status: \(detailText) (\(timestamp))"
         }
     }
 
-    var detailMenuText: String {
+    private var detailText: String {
         switch self {
         case .idle:
-            return "Status: Ready"
+            return "Ready"
         case .success(let detail):
-            return "Status: \(detail)"
+            return detail
         case .failure(let detail):
-            return "Status: \(detail)"
+            return detail
         }
     }
 }
 
 @MainActor
 final class MacWolfApp: NSObject, NSApplicationDelegate {
+    private static let statusSymbolName = "network"
+
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private let settingsManager: SettingsManager
     private let wakeSender: WakeOnLanSending
+    private let timestampFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .autoupdatingCurrent
+        formatter.timeStyle = .medium
+        formatter.dateStyle = .none
+        return formatter
+    }()
     private var settingsWindow: SettingsWindow?
     private var currentStatus: MenuStatus = .idle
     private weak var statusDetailItem: NSMenuItem?
@@ -60,8 +69,9 @@ final class MacWolfApp: NSObject, NSApplicationDelegate {
     private func constructMenu() {
         let menu = NSMenu()
         let interfaces = settingsManager.getInterfaces()
+        let timestamp = timestampFormatter.string(from: Date())
 
-        let detailItem = NSMenuItem(title: currentStatus.detailMenuText, action: nil, keyEquivalent: "")
+        let detailItem = NSMenuItem(title: currentStatus.detailMenuText(timestamp: timestamp), action: nil, keyEquivalent: "")
         detailItem.isEnabled = false
         statusDetailItem = detailItem
         menu.addItem(detailItem)
@@ -146,7 +156,7 @@ final class MacWolfApp: NSObject, NSApplicationDelegate {
         currentStatus = status
         guard let button = statusItem.button else { return }
 
-        let baseImage = NSImage(systemSymbolName: status.icon, accessibilityDescription: "Wake on LAN")
+        let baseImage = NSImage(systemSymbolName: Self.statusSymbolName, accessibilityDescription: "Wake on LAN")
         let whiteConfig = NSImage.SymbolConfiguration(hierarchicalColor: .white)
         let whiteImage = baseImage?.withSymbolConfiguration(whiteConfig) ?? baseImage
         whiteImage?.isTemplate = false
@@ -155,6 +165,7 @@ final class MacWolfApp: NSObject, NSApplicationDelegate {
         button.contentTintColor = nil
         button.title = ""
         button.imagePosition = .imageOnly
-        statusDetailItem?.title = status.detailMenuText
+        let timestamp = timestampFormatter.string(from: Date())
+        statusDetailItem?.title = status.detailMenuText(timestamp: timestamp)
     }
 }
