@@ -8,25 +8,25 @@ final class ShortcutMapperTests: XCTestCase {
         let ninth = ShortcutMapper.shortcut(for: 8)
 
         XCTAssertEqual(first?.keyEquivalent, "1")
-        XCTAssertEqual(first?.modifiers, [])
+        XCTAssertEqual(first?.modifiers, [.command])
         XCTAssertEqual(ninth?.keyEquivalent, "9")
-        XCTAssertEqual(ninth?.modifiers, [])
+        XCTAssertEqual(ninth?.modifiers, [.command])
     }
 
     func testTenthItemUsesZeroKey() {
         let tenth = ShortcutMapper.shortcut(for: 9)
         XCTAssertEqual(tenth?.keyEquivalent, "0")
-        XCTAssertEqual(tenth?.modifiers, [])
+        XCTAssertEqual(tenth?.modifiers, [.command])
     }
 
     func testItemsBeyondTenUseModifierLayers() {
         let eleventh = ShortcutMapper.shortcut(for: 10)
         XCTAssertEqual(eleventh?.keyEquivalent, "1")
-        XCTAssertEqual(eleventh?.modifiers, [.option])
+        XCTAssertEqual(eleventh?.modifiers, [.command, .option])
 
         let twentyFirst = ShortcutMapper.shortcut(for: 20)
         XCTAssertEqual(twentyFirst?.keyEquivalent, "1")
-        XCTAssertEqual(twentyFirst?.modifiers, [.control])
+        XCTAssertEqual(twentyFirst?.modifiers, [.command, .control])
     }
 
     func testOutOfRangeReturnsNil() {

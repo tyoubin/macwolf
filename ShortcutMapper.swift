@@ -8,11 +8,11 @@ struct MenuShortcut {
 enum ShortcutMapper {
     private static let numericKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     private static let modifierLayers: [NSEvent.ModifierFlags] = [
-        [],
-        [.option],
-        [.control],
-        [.option, .shift],
-        [.control, .shift]
+        [.command],
+        [.command, .option],
+        [.command, .control],
+        [.command, .option, .shift],
+        [.command, .control, .shift]
     ]
 
     static func shortcut(for index: Int) -> MenuShortcut? {
